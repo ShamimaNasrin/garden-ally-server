@@ -1,28 +1,44 @@
-# Co-Meet
+# Garden Ally
 
-### Live URL: &nbsp; &nbsp; [co-meet.vercel.app](https://co-meet-server.vercel.app/)
+### Live URL: &nbsp; &nbsp; [garden-ally.vercel.app](https://Garden Ally-server.vercel.app/)
 
 ## Introduction
 
-Co-Meet is a backend server application for a web platform designed to manage co-working space reservations, specifically tailored for meeting room bookings. This server handles all the backend processes for room management, user interactions, booking schedules, and secure data operations, ensuring a seamless experience for both administrators and users.
+A backend server application for a web platform dedicated to connecting gardening enthusiasts and professionals. It manages all backend processes, including user profiles, community engagement, content creation, and premium content access. With robust support for user interactions, verified accounts, content upvotes, and secure data handling, Garden Ally ensures a seamless and interactive experience for gardening communities, allowing users to share tips, access exclusive content, and foster connections.
 
-## Project Overview
+## Table of Contents
 
-The Co-Meet server is built using Node.js and Express, with MongoDB as its primary database for reliable data storage. This server application provides RESTful APIs that facilitate managing rooms, booking slots, user data, and roles. Designed for scalability, the server ensures fast data retrieval and robust security, making it a reliable solution for co-working space booking systems.
+- [Features](#key-features)
+- [Technologies](#technology-stack)
+- [Installation](#installation-instructions)
+- [Usage](#usage)
 
 ## Key Features
 
-- **Authenticate and authorize**: Authenticate and authorize users and admins through JWT tokens.
-- **Room Management**: APIs for CRUD operations on rooms, including details like room number, floor, capacity, amenities, and pricing.
-- **Booking Management**: Endpoints for creating, updating, and deleting booking records, allowing users to reserve rooms and time slots.
-- **Time Slot Management**: Flexible APIs for setting time slots, including start and end times, to ensure accurate scheduling.
-- **Validation**: Strong schema validation using Zod for consistent and reliable data input.
+- **User Authentication**: Simple email registration, secure JWT login, with password reset options;
+
+- **User Profile Management**: Editable profile with a "My Profile" section for posts, followers/following; verification available after one upvote via AAMARPAY for premium access and badge display.
+
+- **Post Creation & Sharing**: Creating/editing tips with image uploads, categorized by topics (Vegetables, Flowers, etc.); verified users can mark posts as Premium.
+
+- **Upvote & Downvote System**: Users can upvote/downvote posts to surface top content.
+
+- **Commenting System**: Commenting with edit/delete options, plus optional replies for more interaction.
+
+- **Payment Integration**: Aamarpay for premium content and profile verification payments.
+
+- **News Feed**: Infinite scroll feed with search/filtering; top upvoted content is prioritized.
+
+- **Following System**: Follow other users for personalized gardening content in the feed.
 
 ## Technology Stack
 
-- **Backend**: Node.js, Express, MongoDB, Mongoose, Zod
-- **Authentication**: JWT-based authentication
-- **Validation**: Zod for data validation and schema enforcement
+- **Node.js**: Runtime environment for server-side JavaScript, enabling non-blocking, event-driven code.
+- **Express**: Web application framework that simplifies routing, middleware management, and API development.
+- **MongoDB**: NoSQL database that stores data in flexible, JSON-like documents, ideal for scalable applications.
+- **Mongoose**: ODM library for MongoDB, providing schema-based modeling and easy database interaction.
+- **Zod**: Schema declaration and validation library for structuring and validating incoming data.
+- **JWT**: Token-based authentication mechanism for secure, stateless session management.
 
 ## Installation Instructions
 
@@ -38,8 +54,8 @@ Ensure you have the following installed on your machine:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/ShamimaNasrin/co-meet-server
-   cd co-meet-server
+   git clone https://github.com/ShamimaNasrin/garden-ally-server
+   cd garden-ally-server
    ```
 
 2. **Install Dependencies**:
@@ -71,14 +87,10 @@ Ensure you have the following installed on your machine:
 
 ## Usage
 
-- Use the API to manage rooms, time slots, and bookings.
-- Authenticate and authorize users and admins through JWT tokens.
-- Allow admins to handle room creation, updates, and deletions, as well as manage slot availability.
-- Enable users to view room options, check booking statuses, and manage their reservations.
-- Process administrative tasks, including updating room details, inventory, and slot schedules.
-
-### Example API Endpoints
-
-- **GET /api/rooms**: Retrieve a list of all rooms.
+- Use the API to manage user profiles, posts, comments, and community interactions.
+- Authenticate and authorize users through JWT tokens for secure access to features.
+- Allow admins to moderate posts, manage user accounts, and oversee community standards.
+- Enable users to create and share gardening tips, upvote content, comment, and follow others in the community.
+- Process premium features, such as verifying user profiles and granting access to exclusive content through secure payment integration.
 
 Make sure to replace credentials on the `.env` file.
