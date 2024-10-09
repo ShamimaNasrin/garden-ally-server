@@ -1,14 +1,20 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 
 // User Interface
 export interface TUser {
+  _id?: string;
   name: string;
   email: string;
   password: string;
   phone: string;
   address: string;
   role: "user" | "admin";
+  profilePhoto: string;
+  favouritePosts?: Types.ObjectId[];
+  isVerified?: boolean;
+  followers?: Types.ObjectId[];
+  followings?: Types.ObjectId[];
   isDeleted: boolean;
 }
 

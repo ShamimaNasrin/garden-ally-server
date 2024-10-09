@@ -3,6 +3,7 @@ import sendResponse from "../../utils/sendResponse";
 import { AuthServices } from "./auth.service";
 import httpStatus from "http-status";
 import config from "../../config";
+import AppError from "../../errors/AppError";
 
 // user Login
 const loginUser = catchAsync(async (req, res) => {
@@ -39,4 +40,54 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
-export const AuthControllers = { loginUser, refreshToken };
+const forgetPassword = catchAsync(async (req, res) => {
+  const userEmail = req.body.email;
+  const result = await AuthServices.forgetPassword(userEmail);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Reset link is generated succesfully!",
+    data: result,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.header("authorization")?.replace("Bearer ", "");
+
+  if (!token) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Something went wrong !");
+  }
+
+  const result = await AuthServices.resetPassword(req.body, token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password reset succesfully!",
+    data: result,
+  });
+});
+
+const changePassword = catchAsync(async (req, res) => {
+  const { ...passwordData } = req.body;
+  const token = req.header("authorization")?.replace("Bearer ", "");
+
+  if (!token) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid token !");
+  }
+
+  const result = await AuthServices.changePassword(token, passwordData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password is updated succesfully!",
+    data: result,
+  });
+});
+
+export const AuthControllers = {
+  loginUser,
+  refreshToken,
+  forgetPassword,
+  resetPassword,
+  changePassword,
+};

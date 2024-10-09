@@ -36,6 +36,36 @@ const userSchema = new Schema<TUser, UserModel>(
       default: "user",
       required: true,
     },
+    profilePhoto: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    favouritePosts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
+    ],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+    followings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
     isDeleted: {
       type: Boolean,
       default: false,

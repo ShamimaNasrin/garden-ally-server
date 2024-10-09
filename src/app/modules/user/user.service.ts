@@ -5,18 +5,11 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
 // create User function
-const createUser = async (userData: any) => {
+const createUser = async (userData: Partial<TUser>) => {
   const role = userData.role || "user";
   const result = await User.create({ ...userData, role });
 
-  return {
-    _id: result._id,
-    name: result.name,
-    email: result.email,
-    phone: result.phone,
-    address: result.address,
-    role: result.role,
-  };
+  return result;
 };
 
 // get a single User
