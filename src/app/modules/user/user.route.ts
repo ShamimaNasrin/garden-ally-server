@@ -6,8 +6,11 @@ import { updateUserValidationSchema } from "./user.validation";
 
 const router = express.Router();
 
-// get all user
+// get all user for admin
 router.get("/", authUser, authAdmin, UserControllers.getAllUsers);
+
+// get all user for following suggestion
+router.get("/followSuggestion", authUser, UserControllers.fetchUnfollowedUsers);
 
 // get a single user
 router.get("/:userId", authUser, UserControllers.getSingleUser);
@@ -16,10 +19,15 @@ router.get("/:userId", authUser, UserControllers.getSingleUser);
 router.patch(
   "/updateProfile",
   authUser,
-  authAdmin,
   validateRequest(updateUserValidationSchema),
-  UserControllers.updateUserRole
+  UserControllers.updateUserProfile
 );
+
+// add follow
+router.post("/add-follow/:id", authUser, UserControllers.addFollow);
+
+// remove from follow
+// router.delete("/unfollow/:id", authUser, UserControllers.unFollow);
 
 // add post to favorites
 router.post("/add-favorite/:id", authUser, UserControllers.addFavoritePost);
@@ -33,11 +41,5 @@ router.delete(
   authUser,
   UserControllers.removeFavoritePost
 );
-
-// add follow
-router.post("/add-follow/:id", authUser, UserControllers.addFollow);
-
-// remove from follow
-router.delete("/unfollow/:id", authUser, UserControllers.unFollow);
 
 export const UserRoutes = router;
