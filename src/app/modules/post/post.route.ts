@@ -5,6 +5,7 @@ import {
   createPostValidationSchema,
   updatePostValidationSchema,
 } from "./post.validation";
+import { PostControllers } from "./post.controller";
 
 const router = express.Router();
 
@@ -22,6 +23,9 @@ router.get("/:postId", authUser, PostControllers.getSinglePost);
 // get all posts
 router.get("/", authUser, PostControllers.getAllPosts);
 
+// get my posts
+router.get("/my-posts", authUser, PostControllers.getMyPosts);
+
 // delete a post
 router.delete("/:postId", authUser, PostControllers.deleteAPost);
 
@@ -32,9 +36,6 @@ router.patch(
   validateRequest(updatePostValidationSchema),
   PostControllers.updateAPost
 );
-
-// get my posts
-router.get("/user/:postId", authUser, PostControllers.getMyPosts);
 
 // add a comment
 router.post("/add-comment/:postId", authUser, PostControllers.addAComment);
@@ -54,6 +55,6 @@ router.delete(
 );
 
 //
-router.post("/upVote/:postId", authUser, PostControllers.upVote);
+router.post("/vote/:postId", authUser, PostControllers.upVoteDownVote);
 
 export const PostRoutes = router;

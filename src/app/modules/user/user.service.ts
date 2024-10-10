@@ -112,6 +112,45 @@ const addFollow = async (userId: string, followId: string) => {
   }
 };
 
+// unfollow
+const unFollow = async (userId: string, followingId: string) => {
+  const session = await User.startSession();
+  session.startTransaction();
+  try {
+    // Remove followingId from user1's followings array
+    const user1Update = User.findByIdAndUpdate(
+      userId,
+      { $pull: { followings: followingId } },
+      { new: true, session }
+    );
+
+    // Remove userId from user2's followers array
+    const user2Update = User.findByIdAndUpdate(
+      followingId,
+      { $pull: { followers: userId } },
+      { new: true, session }
+    );
+
+    // Run both updates concurrently
+    const [updatedUser1, updatedUser2] = await Promise.all([
+      user1Update,
+      user2Update,
+    ]);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return updatedUser1;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Something went wrong while updating following list"
+    );
+  }
+};
+
 // add favorite post
 const addFavoritePost = async (userId: string, postId: string) => {
   const result = await User.findByIdAndUpdate(
@@ -158,6 +197,7 @@ export const UserServices = {
   getSingleUser,
   updateUserProfile,
   addFollow,
+  unFollow,
   addFavoritePost,
   getAllFavoritePosts,
   removeFavoritePost,

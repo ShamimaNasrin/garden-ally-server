@@ -17,6 +17,8 @@ export interface TPost {
   upVoteNumber: number;
   downVoteNumber: number;
   comments?: TComment[];
+  upVoterList: Types.ObjectId[];
+  downVoterList: Types.ObjectId[];
   isPremium: boolean;
   isDeleted: boolean;
 }

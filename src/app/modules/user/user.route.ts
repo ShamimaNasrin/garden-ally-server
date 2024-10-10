@@ -27,7 +27,7 @@ router.patch(
 router.post("/add-follow/:id", authUser, UserControllers.addFollow);
 
 // remove from follow
-// router.delete("/unfollow/:id", authUser, UserControllers.unFollow);
+router.delete("/unfollow/:id", authUser, UserControllers.unFollow);
 
 // add post to favorites
 router.post("/add-favorite/:id", authUser, UserControllers.addFavoritePost);

@@ -118,6 +118,20 @@ const addFollow = catchAsync(async (req, res) => {
   });
 });
 
+// unfollow
+const unFollow = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const followingId = req.body.followingId;
+  const result = await UserServices.unFollow(userId, followingId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User unFollow successfull",
+    data: result,
+  });
+});
+
 // add favorite post
 const addFavoritePost = catchAsync(async (req, res) => {
   const userId = req.body.userId;
@@ -176,6 +190,7 @@ export const UserControllers = {
   getSingleUser,
   updateUserProfile,
   addFollow,
+  unFollow,
   addFavoritePost,
   getAllFavoritePosts,
   removeFavoritePost,

@@ -55,6 +55,20 @@ const PostSchema = new Schema<TPost>(
       default: 0,
     },
     comments: [CommentSchema],
+    upVoterList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+    downVoterList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
     isPremium: {
       type: Boolean,
       default: false,
