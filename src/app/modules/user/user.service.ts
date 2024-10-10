@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
+import { PostModel } from "../post/post.model";
 
 // create User function
 const createUser = async (userData: Partial<TUser>) => {
