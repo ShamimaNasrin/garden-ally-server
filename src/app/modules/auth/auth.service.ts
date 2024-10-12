@@ -81,6 +81,8 @@ const forgetPassword = async (userEmail: string) => {
   // checking if the user is exist
   const user = await User.isUserExistsByEmail(userEmail);
 
+  // console.log("forgetPassword service:", userEmail);
+
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
   }
@@ -108,7 +110,7 @@ const forgetPassword = async (userEmail: string) => {
 
   sendEmail(user.email, resetUILink);
 
-  console.log(resetUILink);
+  // console.log("resetUILink:", resetUILink);
 };
 
 const resetPassword = async (

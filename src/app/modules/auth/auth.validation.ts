@@ -18,9 +18,9 @@ const refreshTokenValidationSchema = z.object({
 
 const forgetPasswordValidationSchema = z.object({
   body: z.object({
-    id: z.string({
-      required_error: "User id is required",
-    }),
+    email: z
+      .string({ required_error: "Email is required" })
+      .email("Invalid email format"),
   }),
 });
 
