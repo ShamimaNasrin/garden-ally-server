@@ -20,9 +20,18 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.FORBIDDEN, "Wrong Password");
 
   const jwtPayload = {
-    // userId: user.id,
+    _id: user._id,
+    name: user.name,
     email: user.email,
+    phone: user.phone,
+    address: user.address,
     role: user.role,
+    profilePhoto: user.profilePhoto,
+    favouritePosts: user.favouritePosts,
+    isVerified: user.isVerified,
+    followers: user.followers,
+    followings: user.followings,
+    isDeleted: user.isDeleted,
   };
 
   // Generate JWT token

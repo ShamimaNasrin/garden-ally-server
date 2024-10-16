@@ -10,11 +10,13 @@ import { verifyPayment } from "./payment.utils";
 const confirmationService = async (transactionId: string) => {
   const verifyResponse = await verifyPayment(transactionId);
 
+  // console.log("Verification status:", verifyResponse);
+
   if (!verifyResponse || verifyResponse.pay_status !== "Successful") {
     return getConfirmationTemplate("Payment Failed!");
   }
 
-  const customerId = transactionId.split("-")[1];
+  const customerId = transactionId.split("-")[2];
   const userUpdateResult = await User.findByIdAndUpdate(
     customerId,
     { isVerified: true },

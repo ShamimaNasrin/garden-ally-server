@@ -10,16 +10,27 @@ const router = express.Router();
 router.get("/", authUser, authAdmin, UserControllers.getAllUsers);
 
 // get all user for following suggestion
-router.get("/followSuggestion", authUser, UserControllers.fetchUnfollowedUsers);
+router.get(
+  "/followSuggestion/:userId",
+  // authUser,
+  UserControllers.fetchUnfollowedUsers
+);
 
 // get a single user
-router.get("/:userId", authUser, UserControllers.getSingleUser);
+router.get("/:userId", authUser, UserControllers.getUserByID);
+
+// get a single user
+router.get(
+  "/getUserByEmail/:userEmail",
+  authUser,
+  UserControllers.getUserByEmail
+);
 
 // update user profile data
 router.patch(
-  "/updateProfile",
-  authUser,
-  validateRequest(updateUserValidationSchema),
+  "/updateProfile/:userId",
+  // authUser,
+  // validateRequest(updateUserValidationSchema),
   UserControllers.updateUserProfile
 );
 
@@ -41,5 +52,8 @@ router.delete(
   authUser,
   UserControllers.removeFavoritePost
 );
+
+// router.post("/get-premium/:userId", authUser, UserControllers.paymentToPremium);
+router.post("/get-premium/:userId", UserControllers.paymentToPremium);
 
 export const UserRoutes = router;

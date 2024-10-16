@@ -2,6 +2,7 @@ import catchAsync from "../../utils/catchAsync";
 import { UserServices } from "./user.service";
 import httpStatus from "http-status";
 import sendResponse from "../../utils/sendResponse";
+import AppError from "../../errors/AppError";
 
 // create a new user
 const signUp = catchAsync(async (req, res) => {
@@ -59,9 +60,36 @@ const fetchUnfollowedUsers = catchAsync(async (req, res) => {
 });
 
 // get a single user
-const getSingleUser = catchAsync(async (req, res) => {
+const getUserByID = catchAsync(async (req, res) => {
   const userId = req.params.userId;
-  const result = await UserServices.getSingleUser(userId);
+  const result = await UserServices.getUserByID(userId);
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "No User Found",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User retrieved successfully",
+      data: result,
+    });
+  }
+});
+
+const getUserByEmail = catchAsync(async (req, res) => {
+  const userEmail = req.params.userEmail;
+
+  if (!userEmail) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invalid user email");
+  }
+
+  // console.log("getUserByEmail:", userEmail);
+  const result = await UserServices.getUserByEmail(userEmail);
 
   if (!result) {
     sendResponse(res, {
@@ -85,7 +113,12 @@ const updateUserProfile = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedInfo = req.body;
 
+  // console.log("updateUserProfile:", userId, updatedInfo);
+
   const result = await UserServices.updateUserProfile(userId, updatedInfo);
+  const { updatedUser, accessToken } = result;
+
+  // console.log("updateUserProfile:", result);
 
   if (!result) {
     sendResponse(res, {
@@ -99,7 +132,10 @@ const updateUserProfile = catchAsync(async (req, res) => {
       statusCode: httpStatus.OK,
       success: true,
       message: "User updated successfully",
-      data: result,
+      data: {
+        updatedUser,
+        accessToken,
+      },
     });
   }
 });
@@ -183,15 +219,42 @@ const removeFavoritePost = catchAsync(async (req, res) => {
   });
 });
 
+// Payment methods
+const paymentToPremium = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+
+  const result = await UserServices.paymentToPremium(userId);
+
+  console.log("payment result:", result);
+
+  if (!result?.result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Payment failed",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "You are a Premium user now",
+      data: result,
+    });
+  }
+});
+
 export const UserControllers = {
   signUp,
   getAllUsers,
   fetchUnfollowedUsers,
-  getSingleUser,
+  getUserByID,
+  getUserByEmail,
   updateUserProfile,
   addFollow,
   unFollow,
   addFavoritePost,
   getAllFavoritePosts,
   removeFavoritePost,
+  paymentToPremium,
 };

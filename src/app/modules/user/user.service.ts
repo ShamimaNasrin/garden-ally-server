@@ -4,6 +4,9 @@ import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { PostModel } from "../post/post.model";
+import { createToken } from "../auth/auth.utils";
+import config from "../../config";
+import { initiatePayment } from "../payments/payment.utils";
 
 // create User function
 const createUser = async (userData: Partial<TUser>) => {
@@ -14,7 +17,7 @@ const createUser = async (userData: Partial<TUser>) => {
 };
 
 // get a single User
-const getSingleUser = async (userId: string) => {
+const getUserByID = async (userId: string) => {
   if (!userId) {
     throw new AppError(httpStatus.NOT_FOUND, "Invalid user ID");
   }
@@ -22,6 +25,25 @@ const getSingleUser = async (userId: string) => {
   const result = await User.findById(userId)
     .populate("followers")
     .populate("following");
+  return result;
+};
+
+// get a single User
+const getUserByEmail = async (userEmail: string) => {
+  if (!userEmail) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invalid user email");
+  }
+
+  // Use findOne to search for the user by email
+  const result = await User.findOne({ email: userEmail })
+    .populate("followers")
+    .populate("following");
+
+  // Check if a user was found
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
   return result;
 };
 
@@ -65,8 +87,32 @@ const updateUserProfile = async (
     if (!updatedUser) {
       throw new AppError(httpStatus.NOT_FOUND, "User not found");
     }
+    const jwtPayload = {
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      address: updatedUser.address,
+      role: updatedUser.role,
+      profilePhoto: updatedUser.profilePhoto,
+      favouritePosts: updatedUser.favouritePosts,
+      isVerified: updatedUser.isVerified,
+      followers: updatedUser.followers,
+      followings: updatedUser.followings,
+      isDeleted: updatedUser.isDeleted,
+    };
 
-    return updatedUser;
+    // Generate new access tokens
+    const accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string
+    );
+
+    return {
+      updatedUser,
+      accessToken,
+    };
   } catch (error) {
     console.error("Error updating user data:", error);
     throw new AppError(httpStatus.BAD_REQUEST, "Unable to update user data");
@@ -190,15 +236,59 @@ const removeFavoritePost = async (userId: string, postId: string) => {
   return user;
 };
 
+// Payment methods
+const paymentToPremium = async (userId: string) => {
+  if (!userId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid user id");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error("No user found");
+  }
+
+  const postWithVotes = await PostModel.findOne({
+    authorId: userId,
+    upVoteNumber: { $gte: 1 },
+  });
+
+  if (!postWithVotes) {
+    throw new Error("To verify your account you need at least 1 upvote");
+  }
+
+  const transactionId = `TXN-${Date.now()}-${userId}`;
+
+  const totalPrice = "10";
+
+  const paymentData = {
+    transactionId,
+    totalPrice,
+    custormerName: user.name,
+    customerEmail: user.email,
+    customerPhone: user.phone,
+    customerAddress: user.address,
+  };
+
+  //payment
+  const paymentSession = await initiatePayment(paymentData);
+
+  // console.log(paymentSession);
+
+  return paymentSession;
+};
+
 export const UserServices = {
   createUser,
   getAllUsers,
   fetchUnfollowedUsers,
-  getSingleUser,
+  getUserByID,
+  getUserByEmail,
   updateUserProfile,
   addFollow,
   unFollow,
   addFavoritePost,
   getAllFavoritePosts,
   removeFavoritePost,
+  paymentToPremium,
 };

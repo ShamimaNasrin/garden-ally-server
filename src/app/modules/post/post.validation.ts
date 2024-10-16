@@ -14,8 +14,6 @@ const createPostValidationSchema = z.object({
   description: z.string().trim().min(1, "Description is required"),
   images: z.array(z.string().url()).optional().default([]),
   category: z.enum(["Vegetables", "Flowers", "Landscaping", "Indoor Plants"]),
-  upVoteNumber: z.number().nonnegative().default(0),
-  downVoteNumber: z.number().nonnegative().default(0),
   comments: z.array(commentValidationSchema).optional().default([]),
   isPremium: z.boolean().default(false),
   isDeleted: z.boolean().default(false),
