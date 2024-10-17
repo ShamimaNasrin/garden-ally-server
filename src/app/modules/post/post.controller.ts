@@ -108,8 +108,8 @@ const updateAPost = catchAsync(async (req, res) => {
 
 // fetch my posts
 const getMyPosts = catchAsync(async (req, res) => {
-  // const token = req.header("authorization")?.replace("Bearer ", "");
-  const token = req.headers.authorization;
+  const token = req.header("authorization")?.replace("Bearer ", "");
+  // const token = req.headers.authorization;
 
   if (!token) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid token provided");

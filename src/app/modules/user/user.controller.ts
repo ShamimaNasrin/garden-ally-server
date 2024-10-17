@@ -6,6 +6,7 @@ import AppError from "../../errors/AppError";
 
 // create a new user
 const signUp = catchAsync(async (req, res) => {
+  // console.log("signUp:", req.body);
   const result = await UserServices.createUser(req.body);
 
   sendResponse(res, {

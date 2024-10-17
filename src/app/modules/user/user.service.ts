@@ -94,7 +94,7 @@ const updateUserProfile = async (
       phone: updatedUser.phone,
       address: updatedUser.address,
       role: updatedUser.role,
-      profilePhoto: updatedUser.profilePhoto,
+      imageUrl: updatedUser.imageUrl,
       favouritePosts: updatedUser.favouritePosts,
       isVerified: updatedUser.isVerified,
       followers: updatedUser.followers,

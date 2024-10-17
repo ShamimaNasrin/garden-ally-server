@@ -58,11 +58,11 @@ const forgetPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  // const token = req.header("authorization")?.replace("Bearer ", "");
+  const token = req.header("authorization")?.replace("Bearer ", "");
+  // const token = req.headers.authorization;
 
   // const { userEmail, newPassword } = req.body;
 
-  const token = req.headers.authorization;
   // console.log("resetPassword:", userId, newPassword, token);
 
   if (!token) {
@@ -80,7 +80,8 @@ const resetPassword = catchAsync(async (req, res) => {
 
 const changePassword = catchAsync(async (req, res) => {
   const { ...passwordData } = req.body;
-  const token = req.headers.authorization;
+  const token = req.header("authorization")?.replace("Bearer ", "");
+  // const token = req.headers.authorization;
 
   if (!token) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid token !");

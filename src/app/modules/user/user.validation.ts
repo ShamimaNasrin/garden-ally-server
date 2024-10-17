@@ -9,7 +9,7 @@ const createUserValidationSchema = z.object({
     phone: z.string().min(8, "Phone number must be at least 8 characters"),
     address: z.string().min(1, "Address is required"),
     role: z.enum(["user", "admin"]).default("user"),
-    profilePhoto: z.string().default(""),
+    imageUrl: z.string().default(""),
   }),
 });
 
@@ -32,7 +32,7 @@ const updateUserValidationSchema = z.object({
       .optional(),
     address: z.string().min(1, "Address is required").optional(),
     role: z.enum(["user", "admin"]).default("user").optional(),
-    profilePhoto: z.string().default("").optional(),
+    imageUrl: z.string().default("").optional(),
   }),
 });
 

@@ -10,7 +10,7 @@ export interface TUser {
   phone: string;
   address: string;
   role: "user" | "admin";
-  profilePhoto: string;
+  imageUrl: string;
   favouritePosts?: Types.ObjectId[];
   isVerified?: boolean;
   followers?: Types.ObjectId[];
