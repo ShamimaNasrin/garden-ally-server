@@ -39,8 +39,8 @@ const getAllPosts = catchAsync(async (req, res) => {
 
 // get a single post
 const getSinglePost = catchAsync(async (req, res) => {
-  const userId = req.params.userId;
-  const result = await PostServices.getSinglePost(userId);
+  const postId = req.params.postId;
+  const result = await PostServices.getSinglePost(postId);
 
   if (!result) {
     sendResponse(res, {
@@ -136,7 +136,7 @@ const getMyPosts = catchAsync(async (req, res) => {
 
 // add comments
 const addAComment = catchAsync(async (req, res) => {
-  const postId = req.params.userId;
+  const postId = req.params.postId;
   const result = await PostServices.addAComment(postId, req.body);
 
   sendResponse(res, {

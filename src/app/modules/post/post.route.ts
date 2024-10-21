@@ -54,7 +54,7 @@ router.delete(
   PostControllers.deleteAComment
 );
 
-//
+// handle upvote and downvote
 router.post("/vote/:postId", authUser, PostControllers.upVoteDownVote);
 
 export const PostRoutes = router;

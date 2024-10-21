@@ -171,8 +171,8 @@ const unFollow = catchAsync(async (req, res) => {
 
 // add favorite post
 const addFavoritePost = catchAsync(async (req, res) => {
-  const userId = req.body.userId;
-  const postId = req.params.postId;
+  const userId = req.params.userId;
+  const postId = req.body.postId;
 
   const result = await UserServices.addFavoritePost(userId, postId);
 
@@ -186,7 +186,7 @@ const addFavoritePost = catchAsync(async (req, res) => {
 
 // get favorite posts
 const getAllFavoritePosts = catchAsync(async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
   const result = await UserServices.getAllFavoritePosts(userId);
 
   if (!result?.length) {
@@ -208,8 +208,8 @@ const getAllFavoritePosts = catchAsync(async (req, res) => {
 
 // remove favorite posts
 const removeFavoritePost = catchAsync(async (req, res) => {
-  const userId = req.body.userId;
-  const postId = req.params.postId;
+  const userId = req.params.userId;
+  const postId = req.body.postId;
   const result = await UserServices.removeFavoritePost(userId, postId);
 
   sendResponse(res, {

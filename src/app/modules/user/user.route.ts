@@ -29,26 +29,26 @@ router.get(
 // update user profile data
 router.patch(
   "/updateProfile/:userId",
-  // authUser,
-  // validateRequest(updateUserValidationSchema),
+  authUser,
+  validateRequest(updateUserValidationSchema),
   UserControllers.updateUserProfile
 );
 
 // add follow
-router.post("/add-follow/:id", authUser, UserControllers.addFollow);
+router.post("/add-follow/:userId", authUser, UserControllers.addFollow);
 
 // remove from follow
-router.delete("/unfollow/:id", authUser, UserControllers.unFollow);
+router.delete("/unfollow/:userId", authUser, UserControllers.unFollow);
 
 // add post to favorites
-router.post("/add-favorite/:id", authUser, UserControllers.addFavoritePost);
+router.post("/add-favorite/:userId", authUser, UserControllers.addFavoritePost);
 
 // gett all favorites
-router.get("/favorites/:id", authUser, UserControllers.getAllFavoritePosts);
+router.get("/favorites/:userId", authUser, UserControllers.getAllFavoritePosts);
 
 // remove post from favorites
 router.delete(
-  "/remove-favorite/:id",
+  "/remove-favorite/:userId",
   authUser,
   UserControllers.removeFavoritePost
 );
