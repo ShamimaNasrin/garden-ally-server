@@ -12,7 +12,8 @@ const createPostValidationSchema = z.object({
   authorId: z.string().min(1, "Author ID is required"), // String for ObjectId
   title: z.string().trim().min(1, "Title is required"),
   description: z.string().trim().min(1, "Description is required"),
-  images: z.array(z.string().url()).optional().default([]),
+  // images: z.array(z.string().url()).optional().default([]),
+  images: z.string().url().optional().default(""),
   category: z.enum(["Vegetables", "Flowers", "Landscaping", "Indoor Plants"]),
   comments: z.array(commentValidationSchema).optional().default([]),
   isPremium: z.boolean().default(false),
@@ -23,7 +24,8 @@ const updatePostValidationSchema = z.object({
   authorId: z.string().min(1, "Author ID is required").optional(), // String for ObjectId
   title: z.string().trim().min(1, "Title is required").optional(),
   description: z.string().trim().min(1, "Description is required").optional(),
-  images: z.array(z.string().url()).optional().default([]),
+  // images: z.array(z.string().url()).optional().default([]),
+  images: z.string().url().optional().default(""),
   category: z
     .enum(["Vegetables", "Flowers", "Landscaping", "Indoor Plants"])
     .optional(),

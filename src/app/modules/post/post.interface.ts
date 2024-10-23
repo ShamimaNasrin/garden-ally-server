@@ -12,7 +12,8 @@ export interface TPost {
   authorId: Types.ObjectId;
   title: string;
   description: string;
-  images?: string[];
+  // images?: string[];
+  images?: string;
   category: "Vegetables" | "Flowers" | "Landscaping" | "Indoor Plants";
   upVoteNumber: number;
   downVoteNumber: number;

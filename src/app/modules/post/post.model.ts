@@ -38,9 +38,12 @@ const PostSchema = new Schema<TPost>(
       trim: true,
     },
     images: {
-      type: [String],
-      default: [],
+      type: String,
     },
+    // images: {
+    //   type: [String],
+    //   default: [],
+    // },
     category: {
       type: String,
       enum: ["Vegetables", "Flowers", "Landscaping", "Indoor Plants"],
