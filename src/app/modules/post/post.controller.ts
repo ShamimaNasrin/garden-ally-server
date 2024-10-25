@@ -6,6 +6,7 @@ import AppError from "../../errors/AppError";
 
 // create a new post
 const createPost = catchAsync(async (req, res) => {
+  console.log("createPost:", req.body);
   const result = await PostServices.createPost(req.body);
 
   sendResponse(res, {
