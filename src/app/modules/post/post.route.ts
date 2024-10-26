@@ -12,7 +12,7 @@ const router = express.Router();
 // create post
 router.post(
   "/create-post",
-  // authUser,
+  authUser,
   validateRequest(createPostValidationSchema),
   PostControllers.createPost
 );

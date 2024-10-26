@@ -43,7 +43,7 @@ class QueryBuilder<T> {
       "limit",
       "sort",
       "fields",
-      "authorId.name",
+      "authorId",
     ];
 
     excludeFields.forEach((field) => delete queryObj[field]);

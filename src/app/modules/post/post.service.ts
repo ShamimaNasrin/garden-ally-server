@@ -32,11 +32,11 @@ const getAllPosts = async (query: Record<string, unknown>) => {
     PostModel.find({ isDeleted: false }),
     query
   )
-    .search(["title", "category"])
+    .search(["title", "description", "category"])
     .filter()
     .sort()
     .fields()
-    .paginate()
+    // .paginate()
     .build();
 
   // Populate nested fields for comments and author information
@@ -45,12 +45,12 @@ const getAllPosts = async (query: Record<string, unknown>) => {
       path: "comments",
       populate: {
         path: "commentatorId",
-        select: "_id name profilePhoto",
+        select: "_id name imageUrl",
       },
     },
     {
       path: "authorId",
-      select: "_id name profilePhoto",
+      select: "_id name imageUrl",
     },
   ]);
 
