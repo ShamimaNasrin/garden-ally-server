@@ -19,6 +19,7 @@ router.post(
 
 // get a post
 router.get("/:postId", authUser, PostControllers.getSinglePost);
+// router.get("/:postId", PostControllers.getSinglePost);
 
 // get all posts
 router.get("/", authUser, PostControllers.getAllPosts);

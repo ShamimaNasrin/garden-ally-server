@@ -20,7 +20,21 @@ const getSinglePost = async (postId: string): Promise<TPost | null> => {
   if (!postId) {
     throw new AppError(httpStatus.NOT_FOUND, "Invalid post ID");
   }
-  const result = await PostModel.findById(postId).populate("authorId");
+
+  // const result = await PostModel.findById(postId).populate("authorId");
+
+  const result = await PostModel.findById(postId)
+    .populate({
+      path: "authorId",
+      select: "_id name profilePhoto",
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "commentatorId",
+        select: "_id name profilePhoto",
+      },
+    });
 
   return result;
 };
@@ -45,12 +59,12 @@ const getAllPosts = async (query: Record<string, unknown>) => {
       path: "comments",
       populate: {
         path: "commentatorId",
-        select: "_id name imageUrl",
+        select: "_id name profilePhoto",
       },
     },
     {
       path: "authorId",
-      select: "_id name imageUrl",
+      select: "_id name profilePhoto",
     },
   ]);
 

@@ -36,7 +36,7 @@ const userSchema = new Schema<TUser, UserModel>(
       default: "user",
       required: true,
     },
-    imageUrl: {
+    profilePhoto: {
       type: String,
       required: true,
       default: "",
