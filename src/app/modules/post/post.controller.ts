@@ -109,14 +109,9 @@ const updateAPost = catchAsync(async (req, res) => {
 
 // fetch my posts
 const getMyPosts = catchAsync(async (req, res) => {
-  const token = req.header("authorization")?.replace("Bearer ", "");
-  // const token = req.headers.authorization;
+  const userId = req.params.userId;
 
-  if (!token) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Invalid token provided");
-  }
-
-  const result = await PostServices.getMyPosts(token);
+  const result = await PostServices.getMyPosts(userId);
 
   if (!result?.length) {
     sendResponse(res, {

@@ -110,20 +110,24 @@ const updateAPost = async (
 };
 
 // get my post
-const getMyPosts = async (token: string) => {
-  // checking if the given token is valid
-  const decoded = jwt.verify(
-    token,
-    config.jwt_refresh_secret as string
-  ) as JwtPayload;
+const getMyPosts = async (userId: string) => {
+  if (!userId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid user ID provided");
+  }
 
-  const { email } = decoded;
-
-  // get user
-  const user = await User.findOne({ email });
-
-  const result = await PostModel.find({ authorId: user?._id })
-    .populate("authorId")
+  // Find posts by the given user ID
+  const result = await PostModel.find({ authorId: userId })
+    .populate({
+      path: "authorId",
+      select: "_id name profilePhoto",
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "commentatorId",
+        select: "_id name profilePhoto",
+      },
+    })
     .sort({ createdAt: -1 });
 
   return result;

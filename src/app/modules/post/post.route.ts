@@ -19,13 +19,13 @@ router.post(
 
 // get a post
 router.get("/:postId", authUser, PostControllers.getSinglePost);
-// router.get("/:postId", PostControllers.getSinglePost);
 
 // get all posts
 router.get("/", authUser, PostControllers.getAllPosts);
 
 // get my posts
-router.get("/my-posts", authUser, PostControllers.getMyPosts);
+router.get("/my-posts/:userId", authUser, PostControllers.getMyPosts);
+// router.get("/my-posts/:userId", PostControllers.getMyPosts);
 
 // delete a post
 router.delete("/:postId", authUser, PostControllers.deleteAPost);
