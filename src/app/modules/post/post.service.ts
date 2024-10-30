@@ -32,6 +32,7 @@ const getSinglePost = async (postId: string): Promise<TPost | null> => {
       path: "comments",
       populate: {
         path: "commentatorId",
+        match: { isDeleted: false },
         select: "_id name profilePhoto",
       },
     });
@@ -116,13 +117,14 @@ const getMyPosts = async (userId: string) => {
   }
 
   // Find posts by the given user ID
-  const result = await PostModel.find({ authorId: userId })
+  const result = await PostModel.find({ authorId: userId, isDeleted: false })
     .populate({
       path: "authorId",
       select: "_id name profilePhoto",
     })
     .populate({
       path: "comments",
+      // match: { isDeleted: false },
       populate: {
         path: "commentatorId",
         select: "_id name profilePhoto",
