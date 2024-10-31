@@ -23,8 +23,19 @@ const getUserByID = async (userId: string) => {
   }
 
   const result = await User.findById(userId)
-    .populate("followers")
-    .populate("following");
+    .populate({
+      path: "followers",
+      select: "_id name profilePhoto",
+    })
+    .populate({
+      path: "followings",
+      select: "_id name profilePhoto",
+    })
+    .populate({
+      path: "favouritePosts",
+      select: "title _id description images category authorId",
+    });
+
   return result;
 };
 
@@ -61,10 +72,11 @@ const fetchUnfollowedUsers = async (userId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  // Fetch users with the role "user" whose _id is not in the user's followings array
+  // Fetch users with the role "user" who are not followed by the user, not deleted, and not the user themselves
   const unfollowedUsers = await User.find({
     role: "user",
-    _id: { $nin: user.followings || [] }, // Exclude users already in the followings array
+    isDeleted: false,
+    _id: { $nin: [userId, ...(user.followings || [])] },
   });
 
   return unfollowedUsers;

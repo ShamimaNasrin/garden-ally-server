@@ -58,10 +58,22 @@ class QueryBuilder<T> {
 
   // * Sorts the query based on defaultSort and conditional sorting if filters are applied
 
+  // sort() {
+  //   const sortCriteria = this.hasFilterConditions
+  //     ? { upVoteNumber: -1, ...this.defaultSort }
+  //     : this.defaultSort;
+
+  //   this.modelQuery = this.modelQuery.sort(sortCriteria);
+
+  //   return this;
+  // }
+
+  // Sort by upVoteNumber by default
   sort() {
-    const sortCriteria = this.hasFilterConditions
-      ? { upVoteNumber: -1, ...this.defaultSort }
-      : this.defaultSort;
+    const sortField = this.query.sort as string;
+    const sortCriteria = sortField
+      ? { [sortField]: -1, ...this.defaultSort }
+      : { upVoteNumber: -1, ...this.defaultSort };
 
     this.modelQuery = this.modelQuery.sort(sortCriteria);
 

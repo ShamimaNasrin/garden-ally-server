@@ -12,7 +12,7 @@ router.get("/", authUser, authAdmin, UserControllers.getAllUsers);
 // get all user for following suggestion
 router.get(
   "/followSuggestion/:userId",
-  // authUser,
+  authUser,
   UserControllers.fetchUnfollowedUsers
 );
 

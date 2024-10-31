@@ -28,8 +28,7 @@ router.get("/", authUser, PostControllers.getAllPosts);
 router.get("/my-posts/:userId", authUser, PostControllers.getMyPosts);
 
 // delete a post
-// router.delete("/:postId", authUser, PostControllers.deleteAPost);
-router.delete("/:postId", PostControllers.deleteAPost);
+router.delete("/:postId", authUser, PostControllers.deleteAPost);
 
 // update a post
 router.patch(

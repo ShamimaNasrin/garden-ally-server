@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import config from "../../config";
+// import config from "../../config";
 import AppError from "../../errors/AppError";
-import jwt, { JwtPayload } from "jsonwebtoken";
+// import jwt, { JwtPayload } from "jsonwebtoken";
 import { PostModel } from "../post/post.model";
 import { TComment, TPost } from "./post.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
-import { User } from "../user/user.model";
+// import { User } from "../user/user.model";
 import { Types } from "mongoose";
 
 // create post function
@@ -32,10 +32,14 @@ const getSinglePost = async (postId: string): Promise<TPost | null> => {
       path: "comments",
       populate: {
         path: "commentatorId",
-        match: { isDeleted: false },
         select: "_id name profilePhoto",
       },
     });
+
+  // Manually filter out deleted comments
+  if (result && result.comments && result?.comments?.length) {
+    result.comments = result.comments.filter((comment) => !comment.isDeleted);
+  }
 
   return result;
 };
@@ -68,6 +72,12 @@ const getAllPosts = async (query: Record<string, unknown>) => {
       select: "_id name profilePhoto",
     },
   ]);
+
+  result.forEach((post) => {
+    if (post?.comments && post?.comments?.length) {
+      post.comments = post.comments.filter((comment) => !comment.isDeleted);
+    }
+  });
 
   return result;
 };
@@ -124,13 +134,18 @@ const getMyPosts = async (userId: string) => {
     })
     .populate({
       path: "comments",
-      // match: { isDeleted: false },
       populate: {
         path: "commentatorId",
         select: "_id name profilePhoto",
       },
     })
     .sort({ createdAt: -1 });
+
+  result.forEach((post) => {
+    if (post?.comments && post?.comments?.length) {
+      post.comments = post.comments.filter((comment) => !comment.isDeleted);
+    }
+  });
 
   return result;
 };

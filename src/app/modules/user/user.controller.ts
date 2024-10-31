@@ -63,6 +63,8 @@ const fetchUnfollowedUsers = catchAsync(async (req, res) => {
 // get a single user
 const getUserByID = catchAsync(async (req, res) => {
   const userId = req.params.userId;
+
+  // console.log("userId: " + userId);
   const result = await UserServices.getUserByID(userId);
 
   if (!result) {
@@ -145,6 +147,9 @@ const updateUserProfile = catchAsync(async (req, res) => {
 const addFollow = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const followId = req.body.followId;
+
+  console.log("userId: " + userId);
+  console.log("followId: " + followId);
   const result = await UserServices.addFollow(userId, followId);
 
   sendResponse(res, {
@@ -159,6 +164,10 @@ const addFollow = catchAsync(async (req, res) => {
 const unFollow = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const followingId = req.body.followingId;
+
+  console.log("userId: " + userId);
+  console.log("followingId: " + followingId);
+
   const result = await UserServices.unFollow(userId, followingId);
 
   sendResponse(res, {
