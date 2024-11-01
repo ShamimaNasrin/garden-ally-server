@@ -35,10 +35,12 @@ router.patch(
 );
 
 // add follow
-router.post("/add-follow/:userId", authUser, UserControllers.addFollow);
+// router.post("/add-follow/:userId", authUser, UserControllers.addFollow);
+router.post("/add-follow/:userId", UserControllers.addFollow);
 
 // remove from follow
-router.delete("/unfollow/:userId", authUser, UserControllers.unFollow);
+// router.delete("/unfollow/:userId", authUser, UserControllers.unFollow);
+router.delete("/unfollow/:userId", UserControllers.unFollow);
 
 // add post to favorites
 router.post("/add-favorite/:userId", authUser, UserControllers.addFavoritePost);

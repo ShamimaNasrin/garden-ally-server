@@ -132,80 +132,170 @@ const updateUserProfile = async (
 };
 
 // add Follow
+// const addFollow = async (userId: string, followId: string) => {
+//   const session = await User.startSession();
+//   session.startTransaction();
+//   try {
+//     // Add followId to user1's followings array
+//     const user1Update = User.findByIdAndUpdate(
+//       userId,
+//       { $addToSet: { followings: followId } },
+//       { new: true, session }
+//     );
+
+//     // Add userId to user2's followers array
+//     const user2Update = User.findByIdAndUpdate(
+//       followId,
+//       { $addToSet: { followers: userId } },
+//       { new: true, session }
+//     );
+
+//     // Run both updates concurrently
+//     const [updatedUser1, updatedUser2] = await Promise.all([
+//       user1Update,
+//       user2Update,
+//     ]);
+
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return updatedUser1;
+//   } catch (error) {
+//     console.log("follow err:", error);
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw new AppError(
+//       httpStatus.BAD_REQUEST,
+//       "Something went wrong while updating following list"
+//     );
+//   }
+// };
+
+// unfollow
+// const unFollow = async (userId: string, followingId: string) => {
+//   const session = await User.startSession();
+//   session.startTransaction();
+//   try {
+//     // Remove followingId from user1's followings array
+//     const user1Update = User.findByIdAndUpdate(
+//       userId,
+//       { $pull: { followings: followingId } },
+//       { new: true, session }
+//     );
+
+//     // Remove userId from user2's followers array
+//     const user2Update = User.findByIdAndUpdate(
+//       followingId,
+//       { $pull: { followers: userId } },
+//       { new: true, session }
+//     );
+
+//     // Run both updates concurrently
+//     const [updatedUser1, updatedUser2] = await Promise.all([
+//       user1Update,
+//       user2Update,
+//     ]);
+
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return updatedUser1;
+//   } catch (error) {
+//     console.log("unfollow err:", error);
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw new AppError(
+//       httpStatus.BAD_REQUEST,
+//       "Something went wrong while updating following list"
+//     );
+//   }
+// };
+
+// Add Follow Function (validated version)
 const addFollow = async (userId: string, followId: string) => {
   const session = await User.startSession();
-  session.startTransaction();
   try {
-    // Add followId to user1's followings array
-    const user1Update = User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { followings: followId } },
-      { new: true, session }
-    );
+    session.startTransaction();
 
-    // Add userId to user2's followers array
-    const user2Update = User.findByIdAndUpdate(
-      followId,
-      { $addToSet: { followers: userId } },
-      { new: true, session }
-    );
+    // Check if already following
+    const isFollowing = await User.findOne({
+      _id: userId,
+      followings: followId,
+    }).session(session);
 
-    // Run both updates concurrently
+    if (isFollowing) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Already following this user");
+    }
+
+    // Update followings and followers concurrently
     const [updatedUser1, updatedUser2] = await Promise.all([
-      user1Update,
-      user2Update,
+      User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { followings: followId } },
+        { new: true, session }
+      ),
+      User.findByIdAndUpdate(
+        followId,
+        { $addToSet: { followers: userId } },
+        { new: true, session }
+      ),
     ]);
 
     await session.commitTransaction();
-    session.endSession();
-
     return updatedUser1;
   } catch (error) {
+    console.log("follow err:", error);
     await session.abortTransaction();
-    session.endSession();
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Something went wrong while updating following list"
     );
+  } finally {
+    session.endSession();
   }
 };
 
-// unfollow
+// Unfollow Function (validated version)
 const unFollow = async (userId: string, followingId: string) => {
   const session = await User.startSession();
-  session.startTransaction();
   try {
-    // Remove followingId from user1's followings array
-    const user1Update = User.findByIdAndUpdate(
-      userId,
-      { $pull: { followings: followingId } },
-      { new: true, session }
-    );
+    session.startTransaction();
 
-    // Remove userId from user2's followers array
-    const user2Update = User.findByIdAndUpdate(
-      followingId,
-      { $pull: { followers: userId } },
-      { new: true, session }
-    );
+    // Check if following exists
+    const isFollowing = await User.findOne({
+      _id: userId,
+      followings: followingId,
+    }).session(session);
 
-    // Run both updates concurrently
+    if (!isFollowing) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Not following this user");
+    }
+
+    // Update followings and followers concurrently
     const [updatedUser1, updatedUser2] = await Promise.all([
-      user1Update,
-      user2Update,
+      User.findByIdAndUpdate(
+        userId,
+        { $pull: { followings: followingId } },
+        { new: true, session }
+      ),
+      User.findByIdAndUpdate(
+        followingId,
+        { $pull: { followers: userId } },
+        { new: true, session }
+      ),
     ]);
 
     await session.commitTransaction();
-    session.endSession();
-
     return updatedUser1;
   } catch (error) {
+    console.log("unfollow err:", error);
     await session.abortTransaction();
-    session.endSession();
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Something went wrong while updating following list"
     );
+  } finally {
+    session.endSession();
   }
 };
 

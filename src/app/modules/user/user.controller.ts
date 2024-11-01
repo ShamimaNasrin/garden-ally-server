@@ -148,8 +148,9 @@ const addFollow = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const followId = req.body.followId;
 
-  console.log("userId: " + userId);
-  console.log("followId: " + followId);
+  // console.log("userId: " + userId);
+  // console.log("followId: " + followId);
+
   const result = await UserServices.addFollow(userId, followId);
 
   sendResponse(res, {
@@ -165,8 +166,8 @@ const unFollow = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const followingId = req.body.followingId;
 
-  console.log("userId: " + userId);
-  console.log("followingId: " + followingId);
+  // console.log("userId: " + userId);
+  // console.log("followingId: " + followingId);
 
   const result = await UserServices.unFollow(userId, followingId);
 
