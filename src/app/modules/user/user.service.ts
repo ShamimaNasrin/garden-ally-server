@@ -59,9 +59,33 @@ const getUserByEmail = async (userEmail: string) => {
 };
 
 // get all Users
-const getAllUsers = async () => {
-  const result = await User.find({ isDeleted: false });
+const getAllUsers = async (adminId: string) => {
+  const result = await User.find({
+    isDeleted: false,
+    _id: { $ne: adminId },
+  });
   return result;
+};
+
+// update a single User Role
+const updateUserRole = async (userId: string, newRole: string) => {
+  try {
+    // console.log("Updating user role:", userId, newRole);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { role: newRole },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    throw new AppError(httpStatus.BAD_REQUEST, "Unable to update user role");
+  }
 };
 
 const fetchUnfollowedUsers = async (userId: string) => {
@@ -82,7 +106,7 @@ const fetchUnfollowedUsers = async (userId: string) => {
   return unfollowedUsers;
 };
 
-// update a single User Role
+// update a single User
 const updateUserProfile = async (
   userId: string,
   updatedInfo: Partial<TUser>
@@ -383,6 +407,7 @@ const paymentToPremium = async (userId: string) => {
 export const UserServices = {
   createUser,
   getAllUsers,
+  updateUserRole,
   fetchUnfollowedUsers,
   getUserByID,
   getUserByEmail,

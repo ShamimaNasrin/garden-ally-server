@@ -19,7 +19,8 @@ const signUp = catchAsync(async (req, res) => {
 
 // get all users
 const getAllUsers = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllUsers();
+  const adminId = req.params.adminId;
+  const result = await UserServices.getAllUsers(adminId);
 
   if (!result?.length) {
     sendResponse(res, {
@@ -33,6 +34,30 @@ const getAllUsers = catchAsync(async (req, res) => {
       statusCode: httpStatus.OK,
       success: true,
       message: "Users retrieved successfully",
+      data: result,
+    });
+  }
+});
+
+// update a user's role
+const updateUserRole = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const updatedInfo = req.body;
+
+  const result = await UserServices.updateUserRole(userId, updatedInfo.role);
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "User not found",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User updated successfully",
       data: result,
     });
   }
@@ -111,7 +136,7 @@ const getUserByEmail = catchAsync(async (req, res) => {
   }
 });
 
-// update user a user's role
+// update user
 const updateUserProfile = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedInfo = req.body;
@@ -258,6 +283,7 @@ const paymentToPremium = catchAsync(async (req, res) => {
 export const UserControllers = {
   signUp,
   getAllUsers,
+  updateUserRole,
   fetchUnfollowedUsers,
   getUserByID,
   getUserByEmail,
