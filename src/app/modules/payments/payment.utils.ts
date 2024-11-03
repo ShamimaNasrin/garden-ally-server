@@ -11,7 +11,7 @@ export const initiatePayment = async (paymentData: any) => {
     const response = await axios.post(process.env.PAYMENT_URL!, {
       store_id: process.env.STORE_ID,
       signature_key: process.env.SIGNATURE_KEY,
-      tran_id: paymentData.transactionID,
+      tran_id: paymentData.transactionId,
       success_url: `http://localhost:5000/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=success`,
       fail_url: `http://localhost:5000/api/payment/confirmation?&status=failed`,
       cancel_url: "http://localhost:3000/",

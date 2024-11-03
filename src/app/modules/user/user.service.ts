@@ -385,12 +385,12 @@ const paymentToPremium = async (userId: string) => {
 
   const transactionId = `TXN-${Date.now()}-${userId}`;
 
-  const totalPrice = "10";
+  const totalPrice = "500";
 
   const paymentData = {
     transactionId,
     totalPrice,
-    custormerName: user.name,
+    customerName: user.name,
     customerEmail: user.email,
     customerPhone: user.phone,
     customerAddress: user.address,

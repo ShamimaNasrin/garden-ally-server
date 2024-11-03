@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garden Ally - Payment Confirmation</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e3f2db;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .confirmation-box {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 40px;
+        width: 450px;
+        box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .confirmation-icon {
+        font-size: 60px;
+        color: #3b873e;
+        margin-bottom: 20px;
+      }
+
+      .confirmation-box h1 {
+        font-size: 26px;
+        color: #3b873e;
+        margin-bottom: 14px;
+      }
+
+      .confirmation-message {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .thank-you-note {
+        font-size: 14px;
+        color: #6d6d6d;
+        margin-bottom: 30px;
+      }
+
+      .action-button {
+        display: inline-block;
+        padding: 12px 26px;
+        background-color: #5cb85c;
+        color: #fff;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .action-button:hover {
+        background-color: #489848;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="confirmation-box">
+      <div class="confirmation-icon">🌿</div>
+      <h1>Payment Confirmed!</h1>
+      <p class="confirmation-message">{{message}}</p>
+      <p class="thank-you-note">
+        Thank you for supporting Garden Ally! Your contribution helps us bring
+        greenery into every home.
+      </p>
+      <a href="https://garden-ally-client.vercel.app/" class="action-button">
+        Go to Home
+      </a>
+    </div>
+  </body>
+</html>

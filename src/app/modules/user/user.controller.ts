@@ -259,6 +259,8 @@ const removeFavoritePost = catchAsync(async (req, res) => {
 const paymentToPremium = catchAsync(async (req, res) => {
   const userId = req.params.userId;
 
+  // console.log("payment userId:", userId);
+
   const result = await UserServices.paymentToPremium(userId);
 
   console.log("payment result:", result);
@@ -274,7 +276,7 @@ const paymentToPremium = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "You are a Premium user now",
+      message: "Payment successful",
       data: result,
     });
   }

@@ -64,7 +64,7 @@ router.delete(
   UserControllers.removeFavoritePost
 );
 
-// router.post("/get-premium/:userId", authUser, UserControllers.paymentToPremium);
-router.post("/get-premium/:userId", UserControllers.paymentToPremium);
+router.post("/get-premium/:userId", authUser, UserControllers.paymentToPremium);
+// router.post("/get-premium/:userId", UserControllers.paymentToPremium);
 
 export const UserRoutes = router;

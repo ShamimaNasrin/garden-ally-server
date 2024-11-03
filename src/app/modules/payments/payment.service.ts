@@ -13,7 +13,7 @@ const confirmationService = async (transactionId: string) => {
   // console.log("Verification status:", verifyResponse);
 
   if (!verifyResponse || verifyResponse.pay_status !== "Successful") {
-    return getConfirmationTemplate("Payment Failed!");
+    return getConfirmationTemplate("Payment Failed!", false);
   }
 
   const customerId = transactionId.split("-")[2];
@@ -27,12 +27,15 @@ const confirmationService = async (transactionId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
 
   await PaymentModel.create({ customerId, transactionId });
-  return getConfirmationTemplate("Payment successful!");
+  return getConfirmationTemplate("Payment successful!", true);
 };
 
 // Inline function to handle template rendering
-const getConfirmationTemplate = (message: string) => {
-  const filePath = join(__dirname, "../../../../public/confirmation.html");
+const getConfirmationTemplate = (message: string, isSuccess: boolean) => {
+  const filePath = isSuccess
+    ? join(__dirname, "../../../../public/confirmationSuccess.html")
+    : join(__dirname, "../../../../public/confirmationFailed.html");
+
   const templateContent = readFileSync(filePath, "utf-8");
   return templateContent.replace("{{message}}", message);
 };
