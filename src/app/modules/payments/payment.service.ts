@@ -40,6 +40,15 @@ const getConfirmationTemplate = (message: string, isSuccess: boolean) => {
   return templateContent.replace("{{message}}", message);
 };
 
+const getPaymentHistory = async () => {
+  const result = await PaymentModel.find().populate({
+    path: "customerId",
+    select: "_id name email role profilePhoto isVerified",
+  });
+  return result;
+};
+
 export const PaymentServices = {
   confirmationService,
+  getPaymentHistory,
 };
