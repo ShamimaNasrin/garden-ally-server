@@ -1,9 +1,6 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-// import httpStatus from "http-status";
-// import sendResponse from "../../utils/sendResponse";
-// import AppError from "../../errors/AppError";
 import { PaymentServices } from "./payment.service";
 
 const confirmationController = catchAsync(async (req, res) => {

@@ -58,18 +58,19 @@ const forgetPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const token = req.header("authorization")?.replace("Bearer ", "");
-  // const token = req.headers.authorization;
-
-  // const { userEmail, newPassword } = req.body;
-
-  // console.log("resetPassword:", userId, newPassword, token);
+  // const token = req.header("authorization")?.replace("Bearer ", "");
+  const token = req.body.token;
+  const userEmail = req.body.userEmail;
+  const newPassword = req.body.newPassword;
 
   if (!token) {
     throw new AppError(httpStatus.BAD_REQUEST, "No token provided");
   }
-  // const result = await resetPasswordService({ userEmail, newPassword }, token);
-  const result = await AuthServices.resetPassword(req.body, token);
+  const result = await AuthServices.resetPassword(
+    userEmail,
+    newPassword,
+    token
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

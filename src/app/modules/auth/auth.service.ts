@@ -90,8 +90,6 @@ const forgetPassword = async (userEmail: string) => {
   // checking if the user is exist
   const user = await User.isUserExistsByEmail(userEmail);
 
-  // console.log("forgetPassword service:", userEmail);
-
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
   }
@@ -115,7 +113,8 @@ const forgetPassword = async (userEmail: string) => {
     "10m"
   );
 
-  const resetUILink = `${config.reset_pass_ui_link}?id=${user._id}&token=${resetToken} `;
+  const resetUILink = `${config.reset_pass_ui_link}?id=${user._id}&email=${user.email}&token=${resetToken}`;
+  // const resetUILink = `${config.reset_pass_ui_link}/${user._id}/${resetToken} `;
 
   sendEmail(user.email, resetUILink);
 
@@ -123,11 +122,12 @@ const forgetPassword = async (userEmail: string) => {
 };
 
 const resetPassword = async (
-  payload: { userEmail: string; newPassword: string },
+  userEmail: string,
+  newPassword: string,
   token: string
 ) => {
   // checking if the user is exist
-  const user = await User.isUserExistsByEmail(payload?.userEmail);
+  const user = await User.isUserExistsByEmail(userEmail);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
@@ -144,14 +144,14 @@ const resetPassword = async (
     config.jwt_access_secret as string
   ) as JwtPayload;
 
-  if (payload.userEmail !== decoded.email) {
-    // console.log(payload.userEmail, decoded.email);
+  if (userEmail !== decoded.email) {
+    // console.log(userEmail, decoded.email);
     throw new AppError(httpStatus.FORBIDDEN, "You are forbidden!");
   }
 
   //hash new password
   const newHashedPassword = await bcrypt.hash(
-    payload.newPassword,
+    newPassword,
     Number(config.bcrypt_salt_rounds)
   );
 
