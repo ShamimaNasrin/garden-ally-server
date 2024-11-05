@@ -405,57 +405,8 @@ const paymentToPremium = async (userId: string) => {
 };
 
 // user Activity Chart
-// const userActivityChart = async () => {
-//   // Get all users from the database where isDeleted is false
-//   const users = await User.find({ isDeleted: false }).lean();
-
-//   // Get the current date
-//   const currentDate = new Date();
-
-//   // Function to parse date strings in the format "DD-MM-YYYY HH:mm:ss"
-//   const parseDate = (dateString: string): Date | null => {
-//     if (!dateString) return null;
-//     const [datePart, timePart] = dateString.split(" ");
-//     const [day, month, year] = datePart.split("-").map(Number);
-//     const [hours, minutes, seconds] = timePart.split(":").map(Number);
-//     return new Date(year, month - 1, day, hours, minutes, seconds);
-//   };
-
-//   // Iterate over users and create the chart data
-//   const result = users.map((user) => {
-//     let isActive = false;
-//     if (user.lastActive) {
-//       const lastActiveDate = parseDate(user.lastActive);
-//       if (lastActiveDate) {
-//         const timeDifference = Math.abs(
-//           currentDate.getTime() - lastActiveDate.getTime()
-//         );
-//         const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-
-//         // User is considered active if last active is within 7 days
-//         if (daysDifference <= 7) {
-//           isActive = true;
-//         }
-//       }
-//     }
-
-//     // Return formatted result for the chart
-//     return {
-//       _id: user._id,
-//       name: user.name,
-//       profilePhoto: user.profilePhoto,
-//       isActive,
-//     };
-//   });
-
-//   return result;
-// };
-
 const userActivityChart = async () => {
-  // Get all users from the database where isDeleted is false
   const users = await User.find({ isDeleted: false }).lean();
-
-  // Get the current date
   const currentDate = new Date();
 
   // Function to parse date strings in the format "DD-MM-YYYY HH:mm:ss"
@@ -467,35 +418,36 @@ const userActivityChart = async () => {
     return new Date(year, month - 1, day, hours, minutes, seconds);
   };
 
-  // Initialize counters for active and inactive users
   let activeCount = 0;
   let inactiveCount = 0;
 
   // Iterate over users and calculate active/inactive counts
-  users.forEach((user) => {
-    let isActive = false;
-    if (user.lastActive) {
-      const lastActiveDate = parseDate(user.lastActive);
-      if (lastActiveDate) {
-        const timeDifference = Math.abs(
-          currentDate.getTime() - lastActiveDate.getTime()
-        );
-        const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+  if (users.length > 0) {
+    users.forEach((user) => {
+      let isActive = false;
+      if (user.lastActive) {
+        const lastActiveDate = parseDate(user.lastActive);
+        if (lastActiveDate) {
+          const timeDifference = Math.abs(
+            currentDate.getTime() - lastActiveDate.getTime()
+          );
+          const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
 
-        // User is considered active if last active is within 7 days
-        if (daysDifference <= 7) {
-          isActive = true;
+          // User is considered active if last active is within 7 days
+          if (daysDifference <= 7) {
+            isActive = true;
+          }
         }
       }
-    }
 
-    // Increment the appropriate counter based on activity status
-    if (isActive) {
-      activeCount++;
-    } else {
-      inactiveCount++;
-    }
-  });
+      // Increment the appropriate counter based on activity status
+      if (isActive) {
+        activeCount++;
+      } else {
+        inactiveCount++;
+      }
+    });
+  }
 
   // Return the formatted result for the chart
   return [
