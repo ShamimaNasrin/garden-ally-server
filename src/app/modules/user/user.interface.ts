@@ -15,6 +15,7 @@ export interface TUser {
   isVerified?: boolean;
   followers?: Types.ObjectId[];
   followings?: Types.ObjectId[];
+  lastActive?: string;
   isDeleted: boolean;
 }
 

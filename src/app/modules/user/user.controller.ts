@@ -235,7 +235,7 @@ const getAllFavoritePosts = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Users retrieved successfully",
+      message: "Posts retrieved successfully",
       data: result,
     });
   }
@@ -250,7 +250,7 @@ const removeFavoritePost = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Users retrieved successfully",
+    message: "Removed post successfully",
     data: result,
   });
 });
@@ -263,7 +263,7 @@ const paymentToPremium = catchAsync(async (req, res) => {
 
   const result = await UserServices.paymentToPremium(userId);
 
-  console.log("payment result:", result);
+  // console.log("payment result:", result);
 
   if (!result?.result) {
     sendResponse(res, {
@@ -277,6 +277,28 @@ const paymentToPremium = catchAsync(async (req, res) => {
       statusCode: httpStatus.OK,
       success: true,
       message: "Payment successful",
+      data: result,
+    });
+  }
+});
+
+// user Activity Chart
+const userActivityChart = catchAsync(async (req, res) => {
+  // console.log("userActivityChart called");
+  const result = await UserServices.userActivityChart();
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Failed to get user activity",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User activity retrieved successfully",
       data: result,
     });
   }
@@ -296,4 +318,5 @@ export const UserControllers = {
   getAllFavoritePosts,
   removeFavoritePost,
   paymentToPremium,
+  userActivityChart,
 };

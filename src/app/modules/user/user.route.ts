@@ -17,6 +17,14 @@ router.get(
 // update user role (admin)
 router.patch("/:userId", authUser, authAdmin, UserControllers.updateUserRole);
 
+// user activity chart data (admin)
+router.get(
+  "/activity-chart",
+  // authUser,
+  // authAdmin,
+  UserControllers.userActivityChart
+);
+
 // get all user for following suggestion
 router.get(
   "/followSuggestion/:userId",
@@ -26,7 +34,6 @@ router.get(
 
 // get a single user
 router.get("/:userId", authUser, UserControllers.getUserByID);
-// router.get("/:userId", UserControllers.getUserByID);
 
 // get a single user
 router.get(
@@ -64,7 +71,7 @@ router.delete(
   UserControllers.removeFavoritePost
 );
 
+// to profile verification
 router.post("/get-premium/:userId", authUser, UserControllers.paymentToPremium);
-// router.post("/get-premium/:userId", UserControllers.paymentToPremium);
 
 export const UserRoutes = router;

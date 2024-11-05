@@ -19,6 +19,32 @@ const loginUser = async (payload: TLoginUser) => {
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, "Wrong Password");
 
+  // Get the current date and time in Bangladesh Standard Time (BST)
+  const currentDateTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Dhaka",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(new Date());
+
+  // Format the date and time to `YYYY-MM-DD HH:mm:ss`
+  const formattedDateTime = currentDateTime
+    .replace(",", "")
+    .replace(/\//g, "-")
+    .split(" ")
+    .join(" ");
+
+  // Save the updated lastActive field to the database
+  await User.findByIdAndUpdate(
+    user._id,
+    { lastActive: formattedDateTime },
+    { new: true }
+  );
+
   const jwtPayload = {
     _id: user._id,
     name: user.name,

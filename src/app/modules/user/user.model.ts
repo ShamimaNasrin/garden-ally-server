@@ -66,6 +66,10 @@ const userSchema = new Schema<TUser, UserModel>(
         default: [],
       },
     ],
+    lastActive: {
+      type: String,
+      default: "",
+    },
     isDeleted: {
       type: Boolean,
       default: false,
