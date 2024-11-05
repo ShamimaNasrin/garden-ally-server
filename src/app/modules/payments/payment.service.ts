@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import { PaymentModel } from "./payment.model";
 import { User } from "../user/user.model";
 import { verifyPayment } from "./payment.utils";
+import { TPaymentWithDates } from "./payment.interface";
 
 const confirmationService = async (transactionId: string) => {
   const verifyResponse = await verifyPayment(transactionId);
@@ -40,6 +41,7 @@ const getConfirmationTemplate = (message: string, isSuccess: boolean) => {
   return templateContent.replace("{{message}}", message);
 };
 
+// Payment History
 const getPaymentHistory = async () => {
   const result = await PaymentModel.find().populate({
     path: "customerId",
@@ -48,7 +50,50 @@ const getPaymentHistory = async () => {
   return result;
 };
 
+// Payment Activity Chart
+const monthlyPaymentChart = async () => {
+  const currentDate = new Date();
+  const startOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const endOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+
+  // Fetch all payments created in the current month
+  const payments = (await PaymentModel.find({
+    createdAt: {
+      $gte: startOfMonth,
+      $lt: endOfMonth,
+    },
+  }).lean()) as unknown as TPaymentWithDates[];
+
+  // Initialize an array to store payment counts for each day of the current month
+  const daysInMonth = endOfMonth.getDate();
+  const paymentChartData = Array.from({ length: daysInMonth }, (_, index) => {
+    const day = String(index + 1).padStart(2, "0");
+    const month = currentDate.toLocaleString("default", { month: "short" });
+    return {
+      day: `${day} ${month}`, // Format as "DD Mon"
+      paymentCount: 0,
+    };
+  });
+
+  // Calculate the payment count for each day of the current month
+  payments.forEach((payment) => {
+    const paymentDay = new Date(payment.createdAt).getDate();
+    paymentChartData[paymentDay - 1].paymentCount += 1;
+  });
+
+  return paymentChartData;
+};
+
 export const PaymentServices = {
   confirmationService,
   getPaymentHistory,
+  monthlyPaymentChart,
 };

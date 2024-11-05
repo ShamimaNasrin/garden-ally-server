@@ -7,3 +7,8 @@ export interface TPayment {
   //   customerEmail: string;
   //   amount: number;
 }
+
+export type TPaymentWithDates = TPayment & {
+  createdAt: Date;
+  updatedAt: Date;
+};

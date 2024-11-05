@@ -1,6 +1,6 @@
 import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
-import { authUser } from "../../middlewares/authUser";
+import { authAdmin, authUser } from "../../middlewares/authUser";
 import {
   createPostValidationSchema,
   updatePostValidationSchema,
@@ -8,6 +8,14 @@ import {
 import { PostControllers } from "./post.controller";
 
 const router = express.Router();
+
+// post activity chart data (admin)
+router.get(
+  "/post-activity",
+  authUser,
+  authAdmin,
+  PostControllers.monthlyPostChart
+);
 
 // create post
 router.post(
@@ -19,7 +27,6 @@ router.post(
 
 // get a post
 router.get("/:postId", authUser, PostControllers.getSinglePost);
-// router.get("/:postId", PostControllers.getSinglePost);
 
 // get all posts
 router.get("/", authUser, PostControllers.getAllPosts);

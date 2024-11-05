@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-// import config from "../../config";
 import AppError from "../../errors/AppError";
-// import jwt, { JwtPayload } from "jsonwebtoken";
 import { PostModel } from "../post/post.model";
-import { TComment, TPost } from "./post.interface";
+import { TComment, TPost, TPostWithDates } from "./post.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
-// import { User } from "../user/user.model";
 import { Types } from "mongoose";
 
 // create post function
@@ -270,6 +267,57 @@ const upVoteDownVote = async (
   return result;
 };
 
+// post Activity Chart
+const monthlyPostChart = async () => {
+  const currentDate = new Date();
+  const startOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const endOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+
+  // Fetch all posts created in the current month
+  // const posts = await PostModel.find({
+  //   isDeleted: false,
+  //   createdAt: {
+  //     $gte: startOfMonth,
+  //     $lt: endOfMonth,
+  //   },
+  // }).lean();
+
+  const posts = (await PostModel.find({
+    isDeleted: false,
+    createdAt: {
+      $gte: startOfMonth,
+      $lt: endOfMonth,
+    },
+  }).lean()) as unknown as TPostWithDates[];
+
+  // Initialize an array to store post counts for each day of the current month
+  const daysInMonth = endOfMonth.getDate();
+  const postChartData = Array.from({ length: daysInMonth }, (_, index) => {
+    const day = String(index + 1).padStart(2, "0");
+    const month = currentDate.toLocaleString("default", { month: "short" });
+    return {
+      day: `${day} ${month}`, // Format as "DD Mon"
+      postCount: 0,
+    };
+  });
+
+  // Calculate the post count for each day of the current month
+  posts.forEach((post) => {
+    const postDay = new Date(post.createdAt).getDate();
+    postChartData[postDay - 1].postCount += 1;
+  });
+
+  return postChartData;
+};
+
 export const PostServices = {
   createPost,
   getAllPosts,
@@ -281,4 +329,5 @@ export const PostServices = {
   deleteAComment,
   updateAComment,
   upVoteDownVote,
+  monthlyPostChart,
 };

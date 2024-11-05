@@ -33,4 +33,30 @@ const getPaymentHistory = catchAsync(async (req, res) => {
   }
 });
 
-export const PaymentControllers = { confirmationController, getPaymentHistory };
+// payment Activity Chart
+const monthlyPaymentChart = catchAsync(async (req, res) => {
+  // console.log("monthlyPaymentChart called");
+  const result = await PaymentServices.monthlyPaymentChart();
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Failed to get payment activity",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Payment activity retrieved successfully",
+      data: result,
+    });
+  }
+});
+
+export const PaymentControllers = {
+  confirmationController,
+  getPaymentHistory,
+  monthlyPaymentChart,
+};

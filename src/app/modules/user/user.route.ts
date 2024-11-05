@@ -19,9 +19,9 @@ router.patch("/:userId", authUser, authAdmin, UserControllers.updateUserRole);
 
 // user activity chart data (admin)
 router.get(
-  "/activity-chart",
-  // authUser,
-  // authAdmin,
+  "/user-activity",
+  authUser,
+  authAdmin,
   UserControllers.userActivityChart
 );
 

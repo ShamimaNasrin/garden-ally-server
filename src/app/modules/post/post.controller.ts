@@ -228,6 +228,28 @@ const upVoteDownVote = catchAsync(async (req, res) => {
   });
 });
 
+// post Activity Chart
+const monthlyPostChart = catchAsync(async (req, res) => {
+  // console.log("monthlyPostChart called");
+  const result = await PostServices.monthlyPostChart();
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Failed to get post activity",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Post activity retrieved successfully",
+      data: result,
+    });
+  }
+});
+
 export const PostControllers = {
   createPost,
   getAllPosts,
@@ -239,4 +261,5 @@ export const PostControllers = {
   deleteAComment,
   updateAComment,
   upVoteDownVote,
+  monthlyPostChart,
 };

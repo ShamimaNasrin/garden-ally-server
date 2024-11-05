@@ -14,4 +14,12 @@ router.get(
   PaymentControllers.getPaymentHistory
 );
 
+// Payment activity chart data (admin)
+router.get(
+  "/payment-activity",
+  authUser,
+  authAdmin,
+  PaymentControllers.monthlyPaymentChart
+);
+
 export const PaymentRoutes = router;

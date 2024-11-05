@@ -23,3 +23,8 @@ export interface TPost {
   isPremium: boolean;
   isDeleted: boolean;
 }
+
+export type TPostWithDates = TPost & {
+  createdAt: Date;
+  updatedAt: Date;
+};
