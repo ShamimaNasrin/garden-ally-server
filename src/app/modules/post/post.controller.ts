@@ -250,6 +250,28 @@ const monthlyPostChart = catchAsync(async (req, res) => {
   }
 });
 
+// Get Post Images
+const getPostImages = catchAsync(async (req, res) => {
+  // console.log("post Images called");
+  const result = await PostServices.getPostImages();
+
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "No Post Images Found",
+      data: [],
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Post Images retrieved successfully",
+      data: result,
+    });
+  }
+});
+
 export const PostControllers = {
   createPost,
   getAllPosts,
@@ -262,4 +284,5 @@ export const PostControllers = {
   updateAComment,
   upVoteDownVote,
   monthlyPostChart,
+  getPostImages,
 };

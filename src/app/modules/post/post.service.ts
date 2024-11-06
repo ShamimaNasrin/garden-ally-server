@@ -318,6 +318,18 @@ const monthlyPostChart = async () => {
   return postChartData;
 };
 
+// Get Post Images
+const getPostImages = async () => {
+  const posts = await PostModel.find(
+    { isDeleted: false },
+    { images: 1, title: 1 }
+  )
+    .sort({ createdAt: -1 })
+    .limit(6);
+
+  return posts;
+};
+
 export const PostServices = {
   createPost,
   getAllPosts,
@@ -330,4 +342,5 @@ export const PostServices = {
   updateAComment,
   upVoteDownVote,
   monthlyPostChart,
+  getPostImages,
 };

@@ -6,6 +6,14 @@ import { updateUserValidationSchema } from "./user.validation";
 
 const router = express.Router();
 
+// user activity chart data (admin)
+router.get(
+  "/user-activity",
+  authUser,
+  authAdmin,
+  UserControllers.userActivityChart
+);
+
 // get all user (admin)
 router.get(
   "/getAllUsers/:adminId",
@@ -16,14 +24,6 @@ router.get(
 
 // update user role (admin)
 router.patch("/:userId", authUser, authAdmin, UserControllers.updateUserRole);
-
-// user activity chart data (admin)
-router.get(
-  "/user-activity",
-  authUser,
-  authAdmin,
-  UserControllers.userActivityChart
-);
 
 // get all user for following suggestion
 router.get(

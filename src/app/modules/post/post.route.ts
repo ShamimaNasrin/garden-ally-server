@@ -25,11 +25,14 @@ router.post(
   PostControllers.createPost
 );
 
-// get a post
-router.get("/:postId", authUser, PostControllers.getSinglePost);
+// Image gallery
+router.get("/post-images", PostControllers.getPostImages);
 
 // get all posts
 router.get("/", authUser, PostControllers.getAllPosts);
+
+// get a post
+router.get("/:postId", authUser, PostControllers.getSinglePost);
 
 // get my posts
 router.get("/my-posts/:userId", authUser, PostControllers.getMyPosts);
