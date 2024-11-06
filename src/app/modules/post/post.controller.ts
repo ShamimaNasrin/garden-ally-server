@@ -66,11 +66,11 @@ const deleteAPost = catchAsync(async (req, res) => {
 
   const result = await PostServices.deleteAPost(postId);
 
-  if (!result) {
+  if (!result || !result.isDeleted) {
     sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
       success: false,
-      message: "No Post Found",
+      message: "Failed to delete post",
       data: [],
     });
   }
