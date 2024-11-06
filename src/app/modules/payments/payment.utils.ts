@@ -2,8 +2,10 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-// http://localhost:5000/api
-// https://garden-ally-server.vercel.app/api
+// http://localhost:5000
+// https://garden-ally-server.vercel.app
+// http://localhost:3000
+// https://garden-ally-client.vercel.app
 
 export const initiatePayment = async (paymentData: any) => {
   console.log("Payment initiat data:", paymentData);
@@ -12,9 +14,9 @@ export const initiatePayment = async (paymentData: any) => {
       store_id: process.env.STORE_ID,
       signature_key: process.env.SIGNATURE_KEY,
       tran_id: paymentData.transactionId,
-      success_url: `http://localhost:5000/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=success`,
-      fail_url: `http://localhost:5000/api/payment/confirmation?&status=failed`,
-      cancel_url: "http://localhost:3000/",
+      success_url: `https://garden-ally-server.vercel.app/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=success`,
+      fail_url: `https://garden-ally-server.vercel.app/api/payment/confirmation?&status=failed`,
+      cancel_url: "https://garden-ally-client.vercel.app/",
       amount: paymentData.totalPrice,
       currency: "BDT",
       desc: "Merchant Registration Payment",
