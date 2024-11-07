@@ -1,6 +1,6 @@
 # Garden Ally
 
-### Live URL: &nbsp; &nbsp; [garden-ally.vercel.app](https://Garden Ally-server.vercel.app/)
+### Live URL: &nbsp; &nbsp; [garden-ally.vercel.app](https://garden-ally-server.vercel.app/)
 
 ## Introduction
 
@@ -23,13 +23,13 @@ A backend server application for a web platform dedicated to connecting gardenin
 
 - **Upvote & Downvote System**: Users can upvote/downvote posts to surface top content.
 
-- **Commenting System**: Commenting with edit/delete options, plus optional replies for more interaction.
+- **Commenting System**: Commenting with edit/delete options.
 
 - **Payment Integration**: Aamarpay for premium content and profile verification payments.
 
 - **News Feed**: Infinite scroll feed with search/filtering; top upvoted content is prioritized.
 
-- **Following System**: Follow other users for personalized gardening content in the feed.
+- **Following System**: User can follow other users for personalized gardening content in the feed.
 
 ## Technology Stack
 
